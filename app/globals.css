@@ -1,0 +1,31 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+:root {
+  --background: #0b1120;
+  --foreground: #e2e8f0;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Code blocks inside markdown keep their highlight.js background. */
+.prose pre {
+  @apply bg-slate-900 border border-slate-800 rounded-lg;
+}
+.prose :not(pre) > code {
+  @apply bg-slate-800 text-sky-300 px-1.5 py-0.5 rounded text-[0.85em];
+}
+.prose :not(pre) > code::before,
+.prose :not(pre) > code::after {
+  content: none;
+}
