@@ -101,7 +101,13 @@ docker run -p 3000:3000 \
 
 Run migrations on release: `npx prisma migrate deploy` (the image ships `prisma/` for this; run it as a release/init step against the production `DATABASE_URL`).
 
-**Vercel**: import the repo, set `DATABASE_URL` (Neon/Supabase/RDS), `AUTH_SECRET`, and optionally the Google OAuth vars. The `postinstall` hook runs `prisma generate` automatically; run `prisma migrate deploy` + `db:seed` against the production database once.
+**Vercel** (recommended): import the repo at [vercel.com/new](https://vercel.com/new) and set two environment variables:
+
+- `DATABASE_URL` — a managed Postgres connection string (e.g. [Neon](https://neon.tech) free tier; use the *direct/unpooled* string so Prisma migrations work).
+- `AUTH_SECRET` — generate with `openssl rand -base64 32`.
+- (optional) `AUTH_GOOGLE_ID` / `AUTH_GOOGLE_SECRET` for Google sign-in.
+
+`vercel.json` makes every deploy run `prisma migrate deploy` + `db:seed` (idempotent upserts) before the build, so schema and content changes ship automatically on push — no manual migration step. If you later hit Postgres connection limits under load, switch `DATABASE_URL` to Neon's pooled string and add `directUrl` to `prisma/schema.prisma` for migrations.
 
 ## Project structure
 
